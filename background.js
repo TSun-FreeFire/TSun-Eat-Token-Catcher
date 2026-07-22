@@ -106,7 +106,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 });
 
 chrome.runtime.onInstalled.addListener(() => {
-  console.log("EAT Token Catcher v1.0.2 installed.");
+  console.log("EAT Token Catcher v1.0.3 installed.");
   chrome.notifications.clear(NOTIFICATION_ID);
   chrome.action.setBadgeText({ text: "" });
 });

@@ -19,25 +19,42 @@
     }
     h1 { font-size: 16px; font-weight: 700; }
     .version { font-size: 11px; color: #666; background: #1a1a2e; padding: 2px 8px; border-radius: 4px; }
-    .login-btn {
-      width: 100%;
-      background: #000;
-      color: #fff;
-      border: 1px solid #333;
-      padding: 14px;
-      border-radius: 10px;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
+    .provider-title {
+      font-size: 12px;
+      color: #aaa;
+      margin: 0 0 12px 0;
+      text-align: center;
+    }
+    .providers {
       display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .provider-btn {
+      background: transparent;
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 6px;
+      cursor: pointer;
+      width: 56px;
+      height: 56px;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      margin-bottom: 20px;
       transition: 0.2s;
     }
-    .login-btn:hover { background: #111; border-color: #555; }
-    .login-icon { font-size: 18px; }
+    .provider-btn:hover {
+      border-color: #fff;
+      transform: scale(1.05);
+    }
+    .provider-btn img {
+      width: 36px;
+      height: 36px;
+      object-fit: contain;
+      pointer-events: none;
+    }
     .panel {
       background: #121220;
       border: 1px solid #2d2d44;
@@ -105,14 +122,28 @@
     <span class="version">v1.0.2</span>
   </div>
 
-  <button id="loginBtn" class="login-btn" type="button">
-    <span class="login-icon">&#x2740;</span>
-    Login With X
-  </button>
+  <p class="provider-title">Select Provider &amp; Login</p>
+  <div class="providers">
+    <button class="provider-btn" data-url="https://auth.garena.com/universal/oauth?platform=8&response_type=code&locale=en-SG&client_id=100067&redirect_uri=https://api.ff.garena.co.id/auth/auth/callback_n?site=https://api-discountstore.gid.recargajogo.com.br/oauth/callback_redirect/" type="button">
+      <img src="https://raw.githubusercontent.com/KillerSharmaBot/Eat-Token/refs/heads/main/image/Google.png" alt="Google" />
+    </button>
+    <button class="provider-btn" data-url="https://auth.garena.com/universal/oauth?platform=3&response_type=code&locale=en-SG&client_id=100067&redirect_uri=https://api.ff.garena.co.id/auth/auth/callback_n?site=https://api-discountstore.gid.recargajogo.com.br/oauth/callback_redirect/" type="button">
+      <img src="https://raw.githubusercontent.com/KillerSharmaBot/Eat-Token/refs/heads/main/image/Facebook.png" alt="Facebook" />
+    </button>
+    <button class="provider-btn" data-url="https://auth.garena.com/universal/oauth?platform=10&response_type=code&locale=en-SG&client_id=100067&redirect_uri=https://api.ff.garena.co.id/auth/auth/callback_n?site=https://api-discountstore.gid.recargajogo.com.br/oauth/callback_redirect/" type="button">
+      <img src="\socail-icons\apple.png" alt="Apple" />
+    </button>
+    <button class="provider-btn" data-url="https://auth.garena.com/universal/oauth?platform=11&response_type=code&locale=en-SG&client_id=100067&redirect_uri=https://api.ff.garena.co.id/auth/auth/callback_n?site=https://api-discountstore.gid.recargajogo.com.br/oauth/callback_redirect/" type="button">
+      <img src="https://raw.githubusercontent.com/KillerSharmaBot/Eat-Token/refs/heads/main/image/X.png" alt="X" />
+    </button>
+    <button class="provider-btn" data-url="https://auth.garena.com/universal/oauth?platform=5&response_type=code&locale=en-SG&client_id=100067&redirect_uri=https://api.ff.garena.co.id/auth/auth/callback_n?site=https://api-discountstore.gid.recargajogo.com.br/oauth/callback_redirect/" type="button">
+      <img src="https://raw.githubusercontent.com/KillerSharmaBot/Eat-Token/refs/heads/main/image/VK.png" alt="VK" />
+    </button>
+  </div>
 
   <div class="panel">
     <div id="noData" class="status-waiting">
-      No data captured yet.<br>Click Login With X to start.
+      No data captured yet.<br>Select a provider to login.
     </div>
 
     <div id="dataPanel" style="display:none">

@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "EAT Token Catcher",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Captures EAT token from Garena auth redirect.",
   "permissions": ["storage", "tabs", "notifications"],
   "host_permissions": [
