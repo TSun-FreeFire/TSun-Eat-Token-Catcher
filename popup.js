@@ -7,6 +7,20 @@ document.addEventListener('DOMContentLoaded', () => {
   const updateInfo = document.getElementById('updateInfo');
   const updateBtn = document.getElementById('updateBtn');
   const updateStatus = document.getElementById('updateStatus');
+  const howToUpdateBtn = document.getElementById('howToUpdateBtn');
+  const backBtn = document.getElementById('backBtn');
+  const mainContentView = document.getElementById('mainContentView');
+  const helpView = document.getElementById('helpView');
+
+  howToUpdateBtn.addEventListener('click', () => {
+    mainContentView.style.display = 'none';
+    helpView.style.display = 'block';
+  });
+
+  backBtn.addEventListener('click', () => {
+    helpView.style.display = 'none';
+    mainContentView.style.display = 'block';
+  });
 
   providerButtons.forEach((btn) => {
     btn.addEventListener('click', () => {
@@ -39,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       chrome.downloads.download({
         url: asset.browser_download_url,
-        filename: `TSun-Eat-Token-Catcher-${release.tag_name || release.name || 'update'}.zip`,
+        filename: `TSun-Eat-Token-Catcher.zip`,
         saveAs: false,
         conflictAction: 'uniquify'
       }, (downloadId) => {
@@ -125,7 +139,7 @@ function renderUpdateStatus(remoteVersion) {
   const updateBar = document.getElementById('updateBar');
   const updateInfo = document.getElementById('updateInfo');
   const updateStatus = document.getElementById('updateStatus');
-  const LOCAL_VERSION = "1.0.4";
+  const LOCAL_VERSION = "1.0.5";
 
   if (!remoteVersion) return;
 
