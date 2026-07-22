@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 360px;
+      padding: 18px;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #0f0f1a;
+      color: #fff;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    h1 { font-size: 16px; font-weight: 700; }
+    .version { font-size: 11px; color: #666; background: #1a1a2e; padding: 2px 8px; border-radius: 4px; }
+    .login-btn {
+      width: 100%;
+      background: #000;
+      color: #fff;
+      border: 1px solid #333;
+      padding: 14px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      transition: 0.2s;
+    }
+    .login-btn:hover { background: #111; border-color: #555; }
+    .login-icon { font-size: 18px; }
+    .panel {
+      background: #121220;
+      border: 1px solid #2d2d44;
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .status-waiting {
+      text-align: center;
+      color: #888;
+      font-size: 13px;
+      padding: 10px 0;
+    }
+    .captured-at {
+      font-size: 11px;
+      color: #666;
+      margin-bottom: 12px;
+      text-align: right;
+    }
+    .row {
+      background: #0f0f1a;
+      border: 1px solid #1f1f33;
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+    }
+    .row .label {
+      font-size: 10px;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+    .row .value {
+      font-size: 14px;
+      word-break: break-all;
+      font-family: monospace;
+      color: #4caf50;
+    }
+    .copy-btn {
+      background: transparent;
+      border: 1px solid #444;
+      color: #888;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 10px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .copy-btn:hover { border-color: #666; color: #fff; }
+    .copy-btn.copied { border-color: #4caf50; color: #4caf50; }
+    .footer {
+      margin-top: 12px;
+      text-align: center;
+      font-size: 10px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>EAT Token Catcher</h1>
+    <span class="version">v1.0.2</span>
+  </div>
+
+  <button id="loginBtn" class="login-btn" type="button">
+    <span class="login-icon">&#x2740;</span>
+    Login With X
+  </button>
+
+  <div class="panel">
+    <div id="noData" class="status-waiting">
+      No data captured yet.<br>Click Login With X to start.
+    </div>
+
+    <div id="dataPanel" style="display:none">
+      <div id="capturedAt" class="captured-at"></div>
+
+      <div class="row">
+        <div class="label">EAT <button id="copy-eat" class="copy-btn" type="button">Copy</button></div>
+        <div class="value" id="val-eat"></div>
+      </div>
+
+      <div class="row">
+        <div class="label">Region <button id="copy-region" class="copy-btn" type="button">Copy</button></div>
+        <div class="value" id="val-region"></div>
+      </div>
+
+      <div class="row">
+        <div class="label">Account ID <button id="copy-account" class="copy-btn" type="button">Copy</button></div>
+        <div class="value" id="val-account"></div>
+      </div>
+
+      <div class="row">
+        <div class="label">Nickname <button id="copy-nickname" class="copy-btn" type="button">Copy</button></div>
+        <div class="value" id="val-nickname"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">Detects discstore.recargajogo.com.br</div>
+  <script src="popup.js"></script>
+</body>
+</html>
