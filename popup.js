@@ -139,7 +139,7 @@ function renderUpdateStatus(remoteVersion) {
   const updateBar = document.getElementById('updateBar');
   const updateInfo = document.getElementById('updateInfo');
   const updateStatus = document.getElementById('updateStatus');
-  const LOCAL_VERSION = "2.0.0";
+  const LOCAL_VERSION = chrome.runtime.getManifest().version;
 
   if (!remoteVersion) return;
 
