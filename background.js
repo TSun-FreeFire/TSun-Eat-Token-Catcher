@@ -2,6 +2,9 @@ const TARGET_HOST = "discstore.recargajogo.com.br";
 const CAPTURE_URL = "http://localhost:5000/capture";
 const STORAGE_KEY = "latest_capture";
 const NOTIFICATION_ID = "eat_token_captured";
+const GITHUB_REPO = "TSun-FreeFire/TSun-Eat-Token-Catcher";
+const GITHUB_API = `https://api.github.com/repos/${GITHUB_REPO}/releases/latest`;
+const LOCAL_VERSION = "1.0.4";
 
 function isTargetUrl(url) {
   try {
@@ -105,8 +108,52 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   }
 });
 
+chrome.alarms.create("checkForUpdates", { periodInMinutes: 30 });
+
+chrome.alarms.onAlarm.addListener((alarm) => {
+  if (alarm.name === "checkForUpdates") {
+    checkForUpdates();
+  }
+});
+
+async function checkForUpdates() {
+  try {
+    const response = await fetch(GITHUB_API);
+    if (!response.ok) return;
+    const release = await response.json();
+    const latestTag = release.tag_name || release.name || "";
+    const latestVersion = latestTag.replace("v", "").trim();
+
+    chrome.storage.local.get(["latest_remote_version", "latest_remote_url"], (result) => {
+      chrome.storage.local.set({
+        latest_remote_version: latestVersion,
+        latest_remote_url: release.html_url
+      });
+
+      if (latestVersion && latestVersion !== LOCAL_VERSION) {
+        chrome.action.setBadgeText({ text: "UP" });
+        chrome.action.setBadgeBackgroundColor({ color: "#ff9800" });
+        chrome.notifications.create("update_available", {
+          type: "basic",
+          iconUrl: "icon128.png",
+          title: "Update Available",
+          message: `Version ${latestVersion} is available (you have ${LOCAL_VERSION}). Click to update.`,
+          priority: 2,
+          requireInteraction: true
+        });
+      } else {
+        chrome.action.setBadgeText({ text: "" });
+      }
+    });
+  } catch (e) {
+    console.warn("Update check failed:", e);
+  }
+}
+
 chrome.runtime.onInstalled.addListener(() => {
-  console.log("EAT Token Catcher v1.0.3 installed.");
+  console.log(`TSun-Eat-Token-Catcher v${LOCAL_VERSION} installed.`);
   chrome.notifications.clear(NOTIFICATION_ID);
+  chrome.notifications.clear("update_available");
   chrome.action.setBadgeText({ text: "" });
+  checkForUpdates();
 });

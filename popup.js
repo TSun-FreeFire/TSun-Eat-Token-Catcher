@@ -1,16 +1,12 @@
-const AUTH_URLS = {
-  google: "https://auth.garena.com/universal/oauth?platform=8&response_type=code&locale=en-SG&client_id=100067&redirect_uri=https://api.ff.garena.co.id/auth/auth/callback_n?site=https://api-discountstore.gid.recargajogo.com.br/oauth/callback_redirect/",
-  facebook: "https://auth.garena.com/universal/oauth?platform=3&response_type=code&locale=en-SG&client_id=100067&redirect_uri=https://api.ff.garena.co.id/auth/auth/callback_n?site=https://api-discountstore.gid.recargajogo.com.br/oauth/callback_redirect/",
-  apple: "https://auth.garena.com/universal/oauth?platform=10&response_type=code&locale=en-SG&client_id=100067&redirect_uri=https://api.ff.garena.co.id/auth/auth/callback_n?site=https://api-discountstore.gid.recargajogo.com.br/oauth/callback_redirect/",
-  x: "https://auth.garena.com/universal/oauth?platform=11&response_type=code&locale=en-SG&client_id=100067&redirect_uri=https://api.ff.garena.co.id/auth/auth/callback_n?site=https://api-discountstore.gid.recargajogo.com.br/oauth/callback_redirect/",
-  vk: "https://auth.garena.com/universal/oauth?platform=5&response_type=code&locale=en-SG&client_id=100067&redirect_uri=https://api.ff.garena.co.id/auth/auth/callback_n?site=https://api-discountstore.gid.recargajogo.com.br/oauth/callback_redirect/"
-};
+const EXTENSION_DIR = "C:\\Users\\Admin\\Documents\\Git_Clone\\1.BETA\\Eat\\extension";
+const GITHUB_API = "https://api.github.com/repos/TSun-FreeFire/TSun-Eat-Token-Catcher/releases/latest";
 
 document.addEventListener('DOMContentLoaded', () => {
   const providerButtons = document.querySelectorAll('.provider-btn');
-  const noData = document.getElementById('noData');
-  const dataPanel = document.getElementById('dataPanel');
-  const capturedAt = document.getElementById('capturedAt');
+  const updateBar = document.getElementById('updateBar');
+  const updateInfo = document.getElementById('updateInfo');
+  const updateBtn = document.getElementById('updateBtn');
+  const updateStatus = document.getElementById('updateStatus');
 
   providerButtons.forEach((btn) => {
     btn.addEventListener('click', () => {
@@ -21,11 +17,56 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  loadData();
+  loadCapturedData();
+
+  updateBtn.addEventListener('click', async () => {
+    updateStatus.textContent = 'Preparing update...';
+    updateBtn.disabled = true;
+
+    try {
+      const response = await fetch(GITHUB_API);
+      if (!response.ok) throw new Error('Failed to fetch release info');
+      const release = await response.json();
+
+      const asset = release.assets.find(a => a.name.endsWith('.zip')) || release.assets[0];
+      if (!asset) {
+        updateStatus.textContent = 'No downloadable asset found.';
+        updateBtn.disabled = false;
+        return;
+      }
+
+      updateStatus.textContent = 'Downloading update package...';
+
+      chrome.downloads.download({
+        url: asset.browser_download_url,
+        filename: `TSun-Eat-Token-Catcher-${release.tag_name || release.name || 'update'}.zip`,
+        saveAs: false,
+        conflictAction: 'uniquify'
+      }, (downloadId) => {
+        if (chrome.runtime.lastError) {
+          updateStatus.textContent = 'Download failed: ' + chrome.runtime.lastError.message;
+          updateBtn.disabled = false;
+          return;
+        }
+        updateStatus.textContent = 'Downloaded! Extract ZIP and load unpacked in chrome://extensions.';
+        updateBtn.disabled = false;
+      });
+    } catch (e) {
+      updateStatus.textContent = 'Update failed: ' + e.message;
+      updateBtn.disabled = false;
+    }
+  });
+
+  checkRemoteVersion();
 
   chrome.storage.onChanged.addListener((changes, area) => {
-    if (area === 'local' && changes.latest_capture) {
-      updateUI(changes.latest_capture.newValue);
+    if (area === 'local') {
+      if (changes.latest_capture) {
+        updateUI(changes.latest_capture.newValue);
+      }
+      if (changes.latest_remote_version) {
+        renderUpdateStatus(changes.latest_remote_version.newValue);
+      }
     }
   });
 
@@ -49,10 +90,53 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-function loadData() {
-  chrome.storage.local.get(['latest_capture'], (result) => {
+function loadCapturedData() {
+  chrome.storage.local.get(['latest_capture', 'latest_remote_version'], (result) => {
     updateUI(result.latest_capture);
+    if (result.latest_remote_version) {
+      renderUpdateStatus(result.latest_remote_version);
+    } else {
+      checkRemoteVersion();
+    }
   });
+}
+
+async function checkRemoteVersion() {
+  try {
+    const response = await fetch(GITHUB_API);
+    if (!response.ok) return;
+    const release = await response.json();
+    const latestTag = release.tag_name || release.name || "";
+    const latestVersion = latestTag.replace("v", "").trim();
+    const downloadUrl = release.html_url;
+
+    chrome.storage.local.set({
+      latest_remote_version: latestVersion,
+      latest_remote_url: downloadUrl
+    });
+
+    renderUpdateStatus(latestVersion);
+  } catch (e) {
+    console.warn('Remote version check failed:', e);
+  }
+}
+
+function renderUpdateStatus(remoteVersion) {
+  const updateBar = document.getElementById('updateBar');
+  const updateInfo = document.getElementById('updateInfo');
+  const updateStatus = document.getElementById('updateStatus');
+  const LOCAL_VERSION = "1.0.4";
+
+  if (!remoteVersion) return;
+
+  if (remoteVersion !== LOCAL_VERSION) {
+    updateBar.classList.remove('hidden');
+    updateInfo.textContent = `New version ${remoteVersion} available`;
+    updateStatus.textContent = '';
+  } else {
+    updateBar.classList.add('hidden');
+    updateStatus.textContent = 'You are on the latest version.';
+  }
 }
 
 function updateUI(data) {

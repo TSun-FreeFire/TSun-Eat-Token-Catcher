@@ -1,12 +1,14 @@
 {
   "manifest_version": 3,
-  "name": "EAT Token Catcher",
-  "version": "1.0.3",
+  "name": "TSun-Eat-Token-Catcher",
+  "version": "1.0.4",
   "description": "Captures EAT token from Garena auth redirect.",
-  "permissions": ["storage", "tabs", "notifications"],
+  "permissions": ["storage", "tabs", "notifications", "alarms", "downloads"],
   "host_permissions": [
     "https://discstore.recargajogo.com.br/*",
-    "https://auth.garena.com/*"
+    "https://auth.garena.com/*",
+    "https://api.github.com/*",
+    "https://github.com/*"
   ],
   "background": {
     "service_worker": "background.js"

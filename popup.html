@@ -15,7 +15,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
+      margin-bottom: 6px;
     }
     h1 { font-size: 16px; font-weight: 700; }
     .version { font-size: 11px; color: #666; background: #1a1a2e; padding: 2px 8px; border-radius: 4px; }
@@ -60,6 +60,7 @@
       border: 1px solid #2d2d44;
       border-radius: 12px;
       padding: 16px;
+      margin-bottom: 12px;
     }
     .status-waiting {
       text-align: center;
@@ -108,8 +109,40 @@
     }
     .copy-btn:hover { border-color: #666; color: #fff; }
     .copy-btn.copied { border-color: #4caf50; color: #4caf50; }
+    .update-bar {
+      background: #1f180a;
+      border: 1px solid #5a3a00;
+      border-radius: 10px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .update-bar.hidden { display: none; }
+    .update-info { font-size: 12px; color: #ffcc80; flex: 1; }
+    .update-btn {
+      background: #ff9800;
+      color: #000;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .update-btn:hover { background: #ffb74d; }
+    .update-status {
+      font-size: 11px;
+      color: #888;
+      text-align: center;
+      margin-bottom: 10px;
+      min-height: 14px;
+    }
     .footer {
-      margin-top: 12px;
+      margin-top: 4px;
       text-align: center;
       font-size: 10px;
       color: #555;
@@ -118,8 +151,8 @@
 </head>
 <body>
   <div class="header">
-    <h1>EAT Token Catcher</h1>
-    <span class="version">v1.0.2</span>
+    <h1>TSun-Eat-Token-Catcher</h1>
+    <span class="version" id="versionBadge">v1.0.4</span>
   </div>
 
   <p class="provider-title">Select Provider &amp; Login</p>
@@ -140,6 +173,13 @@
       <img src="https://raw.githubusercontent.com/KillerSharmaBot/Eat-Token/refs/heads/main/image/VK.png" alt="VK" />
     </button>
   </div>
+
+  <div class="update-bar hidden" id="updateBar">
+    <div class="update-info" id="updateInfo">Update available</div>
+    <button class="update-btn" id="updateBtn" type="button">Update</button>
+  </div>
+
+  <div class="update-status" id="updateStatus"></div>
 
   <div class="panel">
     <div id="noData" class="status-waiting">
