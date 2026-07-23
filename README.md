@@ -1,15 +1,15 @@
-<p align="center">
- 🌟 TSun-Eat-Token-Catcher 🌟
+<h1 align="center">⚡ TSun Eat Token Catcher ⚡</h1>
 
+<p align="center">
   <img src="https://img.shields.io/badge/Chrome_Extension-Manifest_V3-blue?style=for-the-badge&logo=google-chrome&logoColor=white" alt="Chrome Extension Manifest V3" />
   <img src="https://img.shields.io/badge/Platform-Free_Fire-FFD166?style=for-the-badge&logo=garena&logoColor=black" alt="Platform Free Fire" />
-  <img src="https://img.shields.io/badge/Release-v2.0.0-00F5D4?style=for-the-badge" alt="Release Version" />
+  <img src="https://img.shields.io/badge/Release-v1.0.2-00F5D4?style=for-the-badge" alt="Release Version" />
   <img src="https://img.shields.io/badge/License-MIT-F15BB5?style=for-the-badge" alt="License MIT" />
 </p>
 
 ---
 
-## 📖 Overview
+<h2 align="center">📖 Overview</h2>
 
 **TSun-Eat-Token-Catcher** is a lightweight, high-performance Chrome Extension built on **Manifest V3**. It is specifically designed to automatically intercept and capture Garena EAT authentication token parameters during redirect flows. 
 
@@ -23,7 +23,7 @@ The captured data is formatted beautifully and displayed immediately in the exte
 
 ---
 
-## ✨ Features
+<h2 align="center">✨ Features</h2>
 
 🎨 **Elegant Popup UI**  
 A modern user-friendly dashboard built with external scripting to guarantee fully CSP-compliant execution.
@@ -46,9 +46,9 @@ Checks the GitHub Releases endpoint every 30 minutes, showing a `NEW` badge and 
 
 ---
 
-## 🛠️ Installation
+<h2 align="center">🛠️ Installation</h2>
 
-### 🚀 Developer Mode (Unpacked)
+<h3 align="center">🚀 Developer Mode (Unpacked)</h3>
 
 1. **Download/Clone** the repository to your local system:
    ```bash
@@ -62,7 +62,7 @@ Checks the GitHub Releases endpoint every 30 minutes, showing a `NEW` badge and 
 
 ---
 
-## 📖 How to Use
+<h2 align="center">📖 How to Use</h2>
 
 ```mermaid
 graph TD
@@ -80,7 +80,7 @@ graph TD
 
 ---
 
-## 📂 Project Structure
+<h2 align="center">📂 Project Structure</h2>
 
 ```bash
 TSun-Eat-Token-Catcher/
@@ -97,7 +97,7 @@ TSun-Eat-Token-Catcher/
 
 ---
 
-## ⚙️ Configuration Details
+<h2 align="center">⚙️ Configuration Details</h2>
 
 | Parameter | Value / Endpoint |
 | :--- | :--- |
@@ -107,7 +107,7 @@ TSun-Eat-Token-Catcher/
 
 ---
 
-## 🔄 Auto-Update Protocol
+<h2 align="center">🔄 Auto-Update Protocol</h2>
 
 Since unpacked developer extensions do not auto-update natively:
 1. Every **30 minutes**, `chrome.alarms` triggers a check to GitHub Releases.
@@ -117,25 +117,26 @@ Since unpacked developer extensions do not auto-update natively:
 
 ---
 
-## 📜 Changelog
+<h2 align="center">💻 Development & Capture Server</h2>
 
-### 🚀 v1.0.2 (Current)
-*   **Security & Policy Compliance**: Fixed CSP violations by moving all inline scripts into `popup.js`.
-*   **New Providers**: Integrated **Login with X (Twitter)** button in the UI.
-*   **Enhanced UX**:
-    *   Added system tray notifications upon successful capture.
-    *   Added click-action on notification to open the popup.
-    *   Added copy-to-clipboard actions for all token keys.
-    *   Added state synchronization so popups refresh live when captures happen.
+<h3 align="center">Optional Local Webhook Server</h3>
 
-### 🌱 v1.0.0
-*   Initial launch.
-*   Intercepts redirect flow parameters seamlessly.
-*   Added support for Garena OAuth universal targets.
+If you're integrating the capture flow with custom automation scripts, you can run the optional Python listener:
+```bash
+python oauth_app.py
+```
+This runs a local Flask server listening on `http://localhost:5000` to receive and store token payloads.
+
+<h3 align="center">Version Alignment Checklist</h3>
+
+When bumping versions for release, ensure the version keys are synchronized:
+- `manifest.json` ➔ `"version": "1.0.2"`
+- `background.js` ➔ `LOCAL_VERSION = "1.0.2"`
+- `popup.js` ➔ `LOCAL_VERSION = "1.0.2"`
 
 ---
 
-## 🤝 Community & Support
+<h2 align="center">🤝 Community & Support</h2>
 
 *   🐛 **Report Issues:** Open a ticket on [GitHub Issues](https://github.com/TSun-FreeFire/TSun-Eat-Token-Catcher/issues).
 *   ⭐ **Contributions:** Feel free to fork the repository and submit pull requests.

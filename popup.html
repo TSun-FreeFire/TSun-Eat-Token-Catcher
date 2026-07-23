@@ -322,7 +322,7 @@
         </div>
         <div class="header-meta">
           <button id="howToUpdateBtn" class="how-btn" type="button">?</button>
-          <span class="version" id="versionBadge">v2.0.0</span>
+          <span class="version" id="versionBadge">v2.1.0</span>
         </div>
       </div>
 
@@ -335,7 +335,7 @@
           <img src="https://raw.githubusercontent.com/KillerSharmaBot/Eat-Token/refs/heads/main/image/Facebook.png" alt="Facebook" />
         </button>
         <button class="provider-btn" data-url="https://auth.garena.com/universal/oauth?platform=10&response_type=code&locale=en-SG&client_id=100067&redirect_uri=https://api.ff.garena.co.id/auth/auth/callback_n?site=https://api-discountstore.gid.recargajogo.com.br/oauth/callback_redirect/" type="button">
-          <img src="\socail-icons\apple.png" alt="Apple" />
+          <img src="socail-icons/apple.png" alt="Apple" />
         </button>
         <button class="provider-btn" data-url="https://auth.garena.com/universal/oauth?platform=11&response_type=code&locale=en-SG&client_id=100067&redirect_uri=https://api.ff.garena.co.id/auth/auth/callback_n?site=https://api-discountstore.gid.recargajogo.com.br/oauth/callback_redirect/" type="button">
           <img src="https://raw.githubusercontent.com/KillerSharmaBot/Eat-Token/refs/heads/main/image/X.png" alt="X" />
@@ -353,7 +353,10 @@
       <div class="update-status" id="updateStatus"></div>
 
       <div class="panel">
-        <div class="section-title">Captured Token</div>
+        <div class="section-title" style="display: flex; justify-content: space-between; align-items: center;">
+          <span>Captured Token</span>
+          <button id="clearBtn" class="copy-btn" style="color: #f87171; border-color: rgba(248, 113, 113, 0.2); background: rgba(248, 113, 113, 0.05); display: none; text-transform: uppercase;" type="button">Clear</button>
+        </div>
         <div id="noData" class="status-waiting">
           No data captured yet.<br>Select a provider to login.
         </div>

@@ -1,4 +1,3 @@
-const EXTENSION_DIR = "C:\\Users\\Admin\\Documents\\Git_Clone\\1.BETA\\Eat\\extension";
 const GITHUB_API = "https://api.github.com/repos/TSun-FreeFire/TSun-Eat-Token-Catcher/releases/latest";
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -11,6 +10,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const backBtn = document.getElementById('backBtn');
   const mainContentView = document.getElementById('mainContentView');
   const helpView = document.getElementById('helpView');
+  const clearBtn = document.getElementById('clearBtn');
+
+  if (clearBtn) {
+    clearBtn.addEventListener('click', () => {
+      chrome.storage.local.remove('latest_capture', () => {
+        updateUI(null);
+      });
+    });
+  }
 
   howToUpdateBtn.addEventListener('click', () => {
     mainContentView.style.display = 'none';
@@ -157,15 +165,18 @@ function updateUI(data) {
   const noData = document.getElementById('noData');
   const dataPanel = document.getElementById('dataPanel');
   const capturedAt = document.getElementById('capturedAt');
+  const clearBtn = document.getElementById('clearBtn');
 
   if (!data || !data.eat) {
     noData.style.display = 'block';
     dataPanel.style.display = 'none';
+    if (clearBtn) clearBtn.style.display = 'none';
     return;
   }
 
   noData.style.display = 'none';
   dataPanel.style.display = 'block';
+  if (clearBtn) clearBtn.style.display = 'inline-block';
   capturedAt.textContent = 'Captured at ' + new Date(data.timestamp).toLocaleTimeString();
 
   document.getElementById('val-eat').textContent = data.eat;

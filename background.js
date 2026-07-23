@@ -4,7 +4,7 @@ const STORAGE_KEY = "latest_capture";
 const NOTIFICATION_ID = "eat_token_captured";
 const GITHUB_REPO = "TSun-FreeFire/TSun-Eat-Token-Catcher";
 const GITHUB_API = `https://api.github.com/repos/${GITHUB_REPO}/releases/latest`;
-const LOCAL_VERSION = "1.0.4";
+const LOCAL_VERSION = chrome.runtime.getManifest().version;
 
 function isTargetUrl(url) {
   try {
