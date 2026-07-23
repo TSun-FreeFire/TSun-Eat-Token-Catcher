@@ -1,121 +1,147 @@
-# TSun-Eat-Token-Catcher
+<p align="center">
+ 🌟 TSun-Eat-Token-Catcher 🌟
 
-**TSun-Eat-Token-Catcher** is a Chrome Extension (Manifest V3) that automatically captures EAT token parameters from the Garena auth redirect flow. It detects the redirect to `discstore.recargajogo.com.br`, extracts `eat`, `region`, `account_id`, and `nickname`, and displays them instantly in the extension popup.
-
-## Features
-
-*   **Multiple Provider Login** — Supports Google, Facebook, Apple, X (Twitter), and VK login flows via the Garena OAuth universal endpoint.
-*   **Instant Capture** — Uses `chrome.tabs.onUpdated` for bulletproof detection of the final redirect URL containing the tokens.
-*   **Chrome Notification** — Pops up a desktop notification the moment the EAT token is captured.
-*   **Click-to-Open Popup** — Clicking the notification automatically opens the extension popup.
-*   **Copy Buttons** — One-click copy for EAT, Region, Account ID, and Nickname.
-*   **Auto-Update Checker** — Checks GitHub Releases every 30 minutes and notifies you when a new version is available.
-*   **No Inline Scripts** — Fully CSP-compliant with external JS (`popup.js`) and clean HTML/CSS.
-*   **Local Capture Server (Optional)** — Includes `oauth_app.py` / `updater.py` for automation and update flows.
-
-## Installation
-
-### Developer Mode (Unpacked)
-
-1.  Clone or download this repository.
-2.  Open Chrome and go to `chrome://extensions`.
-3.  Enable **Developer mode** (top right toggle).
-4.  Click **Load unpacked**.
-5.  Select the folder containing `manifest.json` (e.g., `TSun_Eat_Token_Catcher_1.0.2` or `extension`).
-6.  Pin the extension to your toolbar for easy access.
-
-### How to Use
-
-1.  Click the **TSun-Eat-Token-Catcher** icon in your Chrome toolbar.
-2.  Select a provider (Google, Facebook, Apple, X, or VK) under **"Select Provider & Login"**.
-3.  Complete the login in the new tab.
-4.  The extension detects the redirect instantly, captures the tokens, and shows a Chrome notification.
-5.  Click the notification or the extension icon to view `eat`, `region`, `account_id`, and `nickname`.
-
-## Project Structure
-
-```
-TSun_Eat_Token_Catcher_1.0.2/
-├── background.js       # Service worker: capture logic, notification, update checker
-├── popup.html          # Extension popup UI
-├── popup.js            # Popup logic (external JS, CSP-safe)
-├── manifest.json       # Manifest V3 configuration
-├── icon16.png          # Extension icon (16x16)
-├── icon48.png          # Extension icon (48x48)
-├── icon128.png         # Extension icon (128x128)
-└── readme.txt          # Original changelog
-```
-
-## Configuration
-
-*   **Target Host:** `discstore.recargajogo.com.br`
-*   **Auth Base:** `https://auth.garena.com/universal/oauth`
-*   **GitHub Releases:** `https://github.com/TSun-FreeFire/TSun-Eat-Token-Catcher/releases`
-
-## Auto-Update
-
-Unpacked Chrome extensions cannot auto-update silently. This extension:
-
-1.  Polls the GitHub Releases API every 30 minutes via `chrome.alarms`.
-2.  Shows an orange **UP** badge and a Chrome notification when a new version is detected.
-3.  Displays an **Update** button in the popup that downloads the latest release ZIP via `chrome.downloads.download()`.
-
-**To actually apply the update:**
-1.  Extract the downloaded ZIP.
-2.  Go to `chrome://extensions`.
-3.  Click **Reload** (🔄) on **TSun-Eat-Token-Catcher**.
-
-For fully automatic updates, publish the extension to the **Chrome Web Store**.
-
-## Development
-
-### Prerequisites
-
-*   Google Chrome (latest)
-*   Python 3.8+ (optional, for local capture server)
-
-### Local Capture Server (Optional)
-
-```powershell
-python oauth_app.py
-```
-
-Serves a local frontend at `http://localhost:5000` that can receive POST captures from the extension.
-
-### Versioning
-
-*   `manifest.json` — `"version": "1.0.2"`
-*   `background.js` — `const LOCAL_VERSION = "1.0.2"`
-*   `popup.js` — `const LOCAL_VERSION = "1.0.2"`
-
-Keep these in sync when releasing new versions.
-
-## Changelog
-
-### v1.0.2
-*   Fixed CSP violation errors by removing inline scripts from `popup.html` and moving all logic to external `popup.js`.
-*   Added **Login With X** button in the popup UI.
-*   Added Chrome notification when EAT token is captured.
-*   Clicking the notification auto-opens the extension popup.
-*   Added copy buttons for all token fields.
-*   Added badge indicator (`NEW`) if popup fails to open from notification.
-*   Popup auto-refreshes when data changes while open.
-
-### v1.0.0
-*   Initial release.
-*   Captures EAT token from `discstore.recargajogo.com.br` redirects.
-*   Supports Google, Facebook, Apple, X, and VK auth providers.
-*   Displays EAT, Region, Account ID, and Nickname in the popup.
-
-## License
-
-MIT License — feel free to use, modify, and distribute.
-
-## Support
-
-*   **GitHub Issues:** [https://github.com/TSun-FreeFire/TSun-Eat-Token-Catcher/issues](https://github.com/TSun-FreeFire/TSun-Eat-Token-Catcher/issues)
-*   **Repository:** [https://github.com/TSun-FreeFire/TSun-Eat-Token-Catcher](https://github.com/TSun-FreeFire/TSun-Eat-Token-Catcher)
+  <img src="https://img.shields.io/badge/Chrome_Extension-Manifest_V3-blue?style=for-the-badge&logo=google-chrome&logoColor=white" alt="Chrome Extension Manifest V3" />
+  <img src="https://img.shields.io/badge/Platform-Free_Fire-FFD166?style=for-the-badge&logo=garena&logoColor=black" alt="Platform Free Fire" />
+  <img src="https://img.shields.io/badge/Release-v2.0.0-00F5D4?style=for-the-badge" alt="Release Version" />
+  <img src="https://img.shields.io/badge/License-MIT-F15BB5?style=for-the-badge" alt="License MIT" />
+</p>
 
 ---
 
-*Built for the Free Fire community. Not affiliated with Garena or X Corp.*
+## 📖 Overview
+
+**TSun-Eat-Token-Catcher** is a lightweight, high-performance Chrome Extension built on **Manifest V3**. It is specifically designed to automatically intercept and capture Garena EAT authentication token parameters during redirect flows. 
+
+When a user initiates authentication, the extension detects the final redirect to `discstore.recargajogo.com.br` instantly extracting critical data fields:
+*   `eat` (Access Token)
+*   `region`
+*   `account_id`
+*   `nickname`
+
+The captured data is formatted beautifully and displayed immediately in the extension popup with one-click copy functionality.
+
+---
+
+## ✨ Features
+
+🎨 **Elegant Popup UI**  
+A modern user-friendly dashboard built with external scripting to guarantee fully CSP-compliant execution.
+
+⚡ **Instant Interception**  
+Uses robust `chrome.tabs.onUpdated` hooks for real-time capture of credentials before target pages load.
+
+🔑 **Multi-Provider Support**  
+Seamlessly works with all standard Garena auth options:
+*   `Google` / `Facebook` / `Apple` / `X (Twitter)` / `VK`
+
+🔔 **Desktop Notifications**  
+Triggers native OS notifications upon capture; clicking the notification opens the extension popup instantly.
+
+📋 **Quick Copy System**  
+Dedicated copy buttons for all credentials to streamline configuration and pasting.
+
+🔄 **Auto-Update System**  
+Checks the GitHub Releases endpoint every 30 minutes, showing a `NEW` badge and a click-to-update download button when updates are released.
+
+---
+
+## 🛠️ Installation
+
+### 🚀 Developer Mode (Unpacked)
+
+1. **Download/Clone** the repository to your local system:
+   ```bash
+   git clone https://github.com/TSun-FreeFire/TSun-Eat-Token-Catcher.git
+   ```
+2. Open Google Chrome and navigate to: `chrome://extensions/`
+3. Toggle the **Developer mode** switch in the top-right corner.
+4. Click the **Load unpacked** button in the top-left.
+5. Choose the folder containing `manifest.json`.
+6. Pin **TSun-Eat-Token-Catcher** to your extension bar!
+
+---
+
+## 📖 How to Use
+
+```mermaid
+graph TD
+    A[Open Extension Popup] --> B[Choose Auth Provider]
+    B --> C[Complete Login in New Tab]
+    C --> D{Intercepter Capture URL}
+    D -->|Match: discstore.recargajogo.com.br| E[Show Captured Notification]
+    E --> F[Click Popup to View & Copy Details]
+```
+
+1. **Select Provider**: Click the extension icon and select your preferred login platform (Google, Facebook, Apple, X, or VK).
+2. **Authorize**: Authenticate on the official login page.
+3. **Capture**: Once logged in, a notification appears confirming successful token catch.
+4. **Copy**: Click the popup to access your data instantly.
+
+---
+
+## 📂 Project Structure
+
+```bash
+TSun-Eat-Token-Catcher/
+├── background.js       # Background service worker (intercepts URLs & checks updates)
+├── popup.html          # Clean & styled user interface
+├── popup.js            # Safe popup interactivity logic
+├── manifest.json       # Chrome Extension Manifest V3 configuration
+├── convert.py          # Icon rasterization helper script
+├── icon16.png          # App icon (16x16)
+├── icon48.png          # App icon (48x48)
+├── icon128.png         # App icon (128x128)
+└── README.md           # Documentation
+```
+
+---
+
+## ⚙️ Configuration Details
+
+| Parameter | Value / Endpoint |
+| :--- | :--- |
+| **Target Host** | `discstore.recargajogo.com.br` |
+| **Auth Base** | `https://auth.garena.com/universal/oauth` |
+| **GitHub Updates** | `https://github.com/TSun-FreeFire/TSun-Eat-Token-Catcher` |
+
+---
+
+## 🔄 Auto-Update Protocol
+
+Since unpacked developer extensions do not auto-update natively:
+1. Every **30 minutes**, `chrome.alarms` triggers a check to GitHub Releases.
+2. If a new version exists, the extension shows an orange **UP** badge and issues a notification.
+3. Clicking **Update** downloads the new release `.zip` automatically.
+4. **To apply**: Simply extract the ZIP, head to `chrome://extensions`, and click **Reload (🔄)** on the extension card.
+
+---
+
+## 📜 Changelog
+
+### 🚀 v1.0.2 (Current)
+*   **Security & Policy Compliance**: Fixed CSP violations by moving all inline scripts into `popup.js`.
+*   **New Providers**: Integrated **Login with X (Twitter)** button in the UI.
+*   **Enhanced UX**:
+    *   Added system tray notifications upon successful capture.
+    *   Added click-action on notification to open the popup.
+    *   Added copy-to-clipboard actions for all token keys.
+    *   Added state synchronization so popups refresh live when captures happen.
+
+### 🌱 v1.0.0
+*   Initial launch.
+*   Intercepts redirect flow parameters seamlessly.
+*   Added support for Garena OAuth universal targets.
+
+---
+
+## 🤝 Community & Support
+
+*   🐛 **Report Issues:** Open a ticket on [GitHub Issues](https://github.com/TSun-FreeFire/TSun-Eat-Token-Catcher/issues).
+*   ⭐ **Contributions:** Feel free to fork the repository and submit pull requests.
+
+---
+
+<p align="center">
+  <sub>Built with ❤️ for the Free Fire community. Not affiliated with Garena or X Corp.</sub>
+</p>
