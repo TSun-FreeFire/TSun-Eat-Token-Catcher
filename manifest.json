@@ -1,9 +1,28 @@
 {
   "manifest_version": 3,
   "name": "TSun-Eat-Token-Catcher",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Captures EAT token from Garena auth redirect.",
-  "permissions": ["storage", "tabs", "notifications", "alarms", "downloads"],
+  "permissions": ["storage", "tabs", "activeTab", "notifications", "alarms", "downloads", "clipboardWrite", "scripting"],
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+E"
+      }
+    },
+    "copy-token": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+C"
+      },
+      "description": "Copy the latest EAT token to clipboard"
+    },
+    "clear-token": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+R"
+      },
+      "description": "Clear the displayed token"
+    }
+  },
   "host_permissions": [
     "https://discstore.recargajogo.com.br/*",
     "https://auth.garena.com/*",

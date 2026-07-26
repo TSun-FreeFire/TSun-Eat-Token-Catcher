@@ -1,6 +1,7 @@
 const TARGET_HOST = "discstore.recargajogo.com.br";
 const CAPTURE_URL = "http://localhost:5000/capture";
 const STORAGE_KEY = "latest_capture";
+const HISTORY_KEY = "history";
 const NOTIFICATION_ID = "eat_token_captured";
 const GITHUB_REPO = "TSun-FreeFire/TSun-Eat-Token-Catcher";
 const GITHUB_API = `https://api.github.com/repos/${GITHUB_REPO}/releases/latest`;
@@ -53,6 +54,14 @@ function capture(url) {
     }
   });
 
+  // Update history (keep last 2)
+  chrome.storage.local.get([HISTORY_KEY], (result) => {
+    let history = result.history || [];
+    history.push(data);
+    if (history.length > 2) history = history.slice(-2);
+    chrome.storage.local.set({ [HISTORY_KEY]: history });
+  });
+
   fetch(CAPTURE_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -62,8 +71,28 @@ function capture(url) {
     console.warn("EAT Token Catcher: POST to server failed", err.message);
   });
 
+  // Auto-copy if enabled
+  chrome.storage.local.get(["auto_copy"], (result) => {
+    if (result.auto_copy && data.eat) {
+      copyToClipboard(data.eat);
+    }
+  });
+
   showNotification(data);
   chrome.runtime.sendMessage({ type: "CAPTURED", data }).catch(() => {});
+}
+
+function copyToClipboard(text) {
+  // Use scripting to inject a function that writes to clipboard from a tab
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    if (tabs.length === 0) return;
+    chrome.scripting.executeScript({
+      target: { tabId: tabs[0].id },
+      func: (t) => navigator.clipboard.writeText(t).then(() => console.log('Auto-copied token')).catch(e => console.warn('Auto-copy failed:', e)),
+      args: [text],
+      world: 'MAIN'
+    }).catch(() => {});
+  });
 }
 
 function showNotification(data) {
@@ -103,6 +132,24 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg.type === "GET_CAPTURED") {
     chrome.storage.local.get([STORAGE_KEY], (result) => {
       sendResponse(result[STORAGE_KEY] || null);
+    });
+    return true;
+  }
+  if (msg.type === "COPY_TOKEN") {
+    chrome.storage.local.get([STORAGE_KEY], (result) => {
+      const data = result[STORAGE_KEY];
+      if (data && data.eat) {
+        copyToClipboard(data.eat);
+        sendResponse({ success: true });
+      } else {
+        sendResponse({ success: false });
+      }
+    });
+    return true;
+  }
+  if (msg.type === "CLEAR_TOKEN") {
+    chrome.storage.local.remove(STORAGE_KEY, () => {
+      sendResponse({ success: true });
     });
     return true;
   }
@@ -156,4 +203,32 @@ chrome.runtime.onInstalled.addListener(() => {
   chrome.notifications.clear("update_available");
   chrome.action.setBadgeText({ text: "" });
   checkForUpdates();
+});
+
+chrome.commands.onCommand.addListener((command) => {
+  if (command === "copy-token") {
+    chrome.storage.local.get([STORAGE_KEY], (result) => {
+      const data = result[STORAGE_KEY];
+      if (data && data.eat) {
+        copyToClipboard(data.eat);
+        chrome.notifications.create("copy_notification", {
+          type: "basic",
+          iconUrl: "icon128.png",
+          title: "Token Copied",
+          message: "EAT token copied to clipboard.",
+          priority: 1
+        });
+      }
+    });
+  } else if (command === "clear-token") {
+    chrome.storage.local.remove(STORAGE_KEY, () => {
+      chrome.notifications.create("clear_notification", {
+        type: "basic",
+        iconUrl: "icon128.png",
+        title: "Token Cleared",
+        message: "The captured token has been cleared.",
+        priority: 1
+      });
+    });
+  }
 });

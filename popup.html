@@ -310,6 +310,103 @@
       display: inline-block;
       margin-top: 4px;
     }
+
+    /* Settings panel */
+    .settings-panel {
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 12px;
+      padding: 14px;
+    }
+    .setting-row {
+      display: flex;
+      align-items: center;
+    }
+    .setting-row input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: #4ade80;
+      cursor: pointer;
+    }
+
+    .history-panel, .profiles-panel {
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 12px;
+      padding: 14px;
+    }
+    .history-item {
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-bottom: 6px;
+      font-size: 11px;
+      color: #94a3b8;
+    }
+    .history-item .h-time {
+      font-size: 9px;
+      color: #64748b;
+      display: block;
+      margin-bottom: 3px;
+      font-weight: 500;
+    }
+    .history-item .h-token {
+      font-family: 'SF Mono', Monaco, monospace;
+      color: #4ade80;
+      font-size: 11px;
+      word-break: break-all;
+    }
+    .profile-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 8px 12px;
+      margin-bottom: 6px;
+    }
+    .profile-item .p-name {
+      font-weight: 500;
+      color: #e2e8f0;
+      font-size: 12px;
+    }
+    .profile-item .p-actions button {
+      background: transparent;
+      border: 1px solid #334155;
+      color: #94a3b8;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 10px;
+      cursor: pointer;
+      margin-left: 4px;
+      transition: all 0.2s ease;
+    }
+    .profile-item .p-actions button:hover {
+      background: #1e293b;
+      color: #e2e8f0;
+    }
+    .profile-item .p-actions .load-btn {
+      color: #4ade80;
+      border-color: rgba(74, 222, 128, 0.2);
+    }
+    .profile-item .p-actions .load-btn:hover {
+      background: rgba(74, 222, 128, 0.1);
+    }
+    .profile-item .p-actions .del-btn {
+      color: #f87171;
+      border-color: rgba(248, 113, 113, 0.2);
+    }
+    .profile-item .p-actions .del-btn:hover {
+      background: rgba(248, 113, 113, 0.1);
+    }
+    .export-import-panel {
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 12px;
+      padding: 14px;
+    }
   </style>
 </head>
 <body>
@@ -322,7 +419,7 @@
         </div>
         <div class="header-meta">
           <button id="howToUpdateBtn" class="how-btn" type="button">?</button>
-          <span class="version" id="versionBadge">v2.1.0</span>
+          <span class="version" id="versionBadge">v2.2.0</span>
         </div>
       </div>
 
@@ -384,6 +481,45 @@
             <div class="value" id="val-nickname"></div>
           </div>
         </div>
+      </div>
+
+      <div class="settings-panel" style="margin-top: 12px;">
+        <div class="section-title">Settings</div>
+        <div class="setting-row">
+          <label for="autoCopyToggle" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+            <input type="checkbox" id="autoCopyToggle">
+            <span style="font-size: 12px; color: #cbd5e1;">Auto-copy token on capture</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="history-panel" style="margin-top: 12px;">
+        <div class="section-title" style="display: flex; justify-content: space-between; align-items: center;">
+          <span>History (last 2)</span>
+        </div>
+        <div id="historyList">
+          <div class="status-waiting" style="font-size: 12px; padding: 12px 0;">No history yet.</div>
+        </div>
+      </div>
+
+      <div class="profiles-panel" style="margin-top: 12px;">
+        <div class="section-title" style="display: flex; justify-content: space-between; align-items: center;">
+          <span>Profiles</span>
+          <button id="saveProfileBtn" class="copy-btn" type="button" style="text-transform: none;">Save Current</button>
+        </div>
+        <div style="display: flex; gap: 6px; margin-bottom: 8px;">
+          <input type="text" id="profileNameInput" placeholder="Profile name" style="flex:1; background: #0f172a; border: 1px solid #1e293b; border-radius: 6px; padding: 6px 10px; color: #e2e8f0; font-size: 12px;">
+          <button id="saveProfileBtn2" class="copy-btn" type="button" style="text-transform: none;">Save</button>
+        </div>
+        <div id="profileList">
+          <div class="status-waiting" style="font-size: 12px; padding: 8px 0;">No profiles saved.</div>
+        </div>
+      </div>
+
+      <div class="export-import-panel" style="margin-top: 12px; display: flex; gap: 8px;">
+        <button id="exportBtn" class="copy-btn" type="button" style="text-transform: none; flex:1;">Export Data</button>
+        <button id="importBtn" class="copy-btn" type="button" style="text-transform: none; flex:1;">Import Data</button>
+        <input type="file" id="importFileInput" accept=".json" style="display: none;">
       </div>
 
       <div class="footer">Designed for discstore.recargajogo.com.br</div>
