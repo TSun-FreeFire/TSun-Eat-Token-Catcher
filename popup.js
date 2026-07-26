@@ -182,6 +182,20 @@ async function checkRemoteVersion() {
   }
 }
 
+// Compare two semver strings. Returns 1 if a>b, -1 if a<b, 0 if equal.
+function compareVersions(a, b) {
+  const pa = String(a).replace(/^v/i, '').trim().split('.').map((n) => parseInt(n, 10) || 0);
+  const pb = String(b).replace(/^v/i, '').trim().split('.').map((n) => parseInt(n, 10) || 0);
+  const len = Math.max(pa.length, pb.length);
+  for (let i = 0; i < len; i++) {
+    const na = pa[i] || 0;
+    const nb = pb[i] || 0;
+    if (na > nb) return 1;
+    if (na < nb) return -1;
+  }
+  return 0;
+}
+
 function renderUpdateStatus(remoteVersion) {
   const updateBar = document.getElementById('updateBar');
   const updateInfo = document.getElementById('updateInfo');
@@ -191,14 +205,15 @@ function renderUpdateStatus(remoteVersion) {
 
   if (!remoteVersion) return;
 
-  if (remoteVersion !== LOCAL_VERSION) {
+  // Only flag an update when the remote version is genuinely newer.
+  if (compareVersions(remoteVersion, LOCAL_VERSION) > 0) {
     updateBar.classList.remove('hidden');
     updateInfo.textContent = `New version ${remoteVersion} available`;
     updateStatus.textContent = '';
     if (settingsTabDot) settingsTabDot.classList.add('show');
   } else {
     updateBar.classList.add('hidden');
-    updateStatus.textContent = 'You are on the latest version.';
+    updateStatus.textContent = `You are on the latest version (v${LOCAL_VERSION}).`;
     if (settingsTabDot) settingsTabDot.classList.remove('show');
   }
 }

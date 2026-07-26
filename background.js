@@ -163,6 +163,20 @@ chrome.alarms.onAlarm.addListener((alarm) => {
   }
 });
 
+// Compare two semver strings. Returns 1 if a>b, -1 if a<b, 0 if equal.
+function compareVersions(a, b) {
+  const pa = String(a).replace(/^v/i, '').trim().split('.').map((n) => parseInt(n, 10) || 0);
+  const pb = String(b).replace(/^v/i, '').trim().split('.').map((n) => parseInt(n, 10) || 0);
+  const len = Math.max(pa.length, pb.length);
+  for (let i = 0; i < len; i++) {
+    const na = pa[i] || 0;
+    const nb = pb[i] || 0;
+    if (na > nb) return 1;
+    if (na < nb) return -1;
+  }
+  return 0;
+}
+
 async function checkForUpdates() {
   try {
     const response = await fetch(GITHUB_API);
@@ -177,7 +191,8 @@ async function checkForUpdates() {
         latest_remote_url: release.html_url
       });
 
-      if (latestVersion && latestVersion !== LOCAL_VERSION) {
+      // Only notify when the remote version is genuinely newer than local.
+      if (latestVersion && compareVersions(latestVersion, LOCAL_VERSION) > 0) {
         chrome.action.setBadgeText({ text: "UP" });
         chrome.action.setBadgeBackgroundColor({ color: "#ff9800" });
         chrome.notifications.create("update_available", {
