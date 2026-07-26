@@ -3,15 +3,23 @@ const STORAGE_KEY = "latest_capture";
 
 document.addEventListener('DOMContentLoaded', () => {
   const providerButtons = document.querySelectorAll('.provider-btn');
-  const updateBar = document.getElementById('updateBar');
-  const updateInfo = document.getElementById('updateInfo');
   const updateBtn = document.getElementById('updateBtn');
   const updateStatus = document.getElementById('updateStatus');
-  const howToUpdateBtn = document.getElementById('howToUpdateBtn');
-  const backBtn = document.getElementById('backBtn');
-  const mainContentView = document.getElementById('mainContentView');
-  const helpView = document.getElementById('helpView');
   const clearBtn = document.getElementById('clearBtn');
+
+  // ===== Tab switching =====
+  const tabButtons = document.querySelectorAll('.tab-btn');
+  const tabContents = document.querySelectorAll('.tab-content');
+  tabButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const target = btn.getAttribute('data-tab');
+      tabButtons.forEach((b) => b.classList.remove('active'));
+      tabContents.forEach((c) => c.classList.remove('active'));
+      btn.classList.add('active');
+      const content = document.getElementById('tab-' + target);
+      if (content) content.classList.add('active');
+    });
+  });
 
   if (clearBtn) {
     clearBtn.addEventListener('click', () => {
@@ -20,16 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
-
-  howToUpdateBtn.addEventListener('click', () => {
-    mainContentView.style.display = 'none';
-    helpView.style.display = 'block';
-  });
-
-  backBtn.addEventListener('click', () => {
-    helpView.style.display = 'none';
-    mainContentView.style.display = 'block';
-  });
 
   providerButtons.forEach((btn) => {
     btn.addEventListener('click', () => {
@@ -188,6 +186,7 @@ function renderUpdateStatus(remoteVersion) {
   const updateBar = document.getElementById('updateBar');
   const updateInfo = document.getElementById('updateInfo');
   const updateStatus = document.getElementById('updateStatus');
+  const settingsTabDot = document.getElementById('settingsTabDot');
   const LOCAL_VERSION = chrome.runtime.getManifest().version;
 
   if (!remoteVersion) return;
@@ -196,9 +195,11 @@ function renderUpdateStatus(remoteVersion) {
     updateBar.classList.remove('hidden');
     updateInfo.textContent = `New version ${remoteVersion} available`;
     updateStatus.textContent = '';
+    if (settingsTabDot) settingsTabDot.classList.add('show');
   } else {
     updateBar.classList.add('hidden');
     updateStatus.textContent = 'You are on the latest version.';
+    if (settingsTabDot) settingsTabDot.classList.remove('show');
   }
 }
 

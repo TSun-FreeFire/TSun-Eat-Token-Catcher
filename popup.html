@@ -22,7 +22,7 @@
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
       padding-bottom: 14px;
       border-bottom: 1px solid #1e293b;
     }
@@ -47,6 +47,69 @@
       border-radius: 6px;
       border: 1px solid #1f2937;
       font-family: 'SF Mono', Monaco, monospace;
+    }
+
+    /* Tab bar */
+    .tabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 16px;
+      background: #111827;
+      border: 1px solid #1f2937;
+      border-radius: 12px;
+      padding: 4px;
+    }
+    .tab-btn {
+      position: relative;
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #64748b;
+      padding: 8px 4px;
+      border-radius: 8px;
+      font-size: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      letter-spacing: 0.2px;
+    }
+    .tab-btn .tab-icon {
+      font-size: 16px;
+      line-height: 1;
+    }
+    .tab-btn:hover {
+      color: #cbd5e1;
+    }
+    .tab-btn.active {
+      background: #1e293b;
+      color: #f8fafc;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+    }
+    .tab-dot {
+      position: absolute;
+      top: 4px;
+      right: 8px;
+      width: 6px;
+      height: 6px;
+      background: #f59e0b;
+      border-radius: 50%;
+      display: none;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    .tab-dot.show { display: block; }
+
+    .tab-content { display: none; }
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.22s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .section-title {
@@ -244,39 +307,6 @@
       letter-spacing: 0.3px;
     }
 
-    .how-btn {
-      background: #1e293b;
-      color: #93c5fd;
-      border: 1px solid #334155;
-      padding: 4px 10px;
-      border-radius: 6px;
-      font-size: 10px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    .how-btn:hover {
-      background: #334155;
-      color: #e2e8f0;
-      border-color: #475569;
-    }
-
-    .back-btn {
-      background: #1e293b;
-      color: #e2e8f0;
-      border: 1px solid #334155;
-      padding: 6px 12px;
-      border-radius: 7px;
-      font-size: 11px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    .back-btn:hover {
-      background: #334155;
-      border-color: #475569;
-    }
-
     .step {
       background: #0f172a;
       border: 1px solid #1e293b;
@@ -311,12 +341,16 @@
       margin-top: 4px;
     }
 
-    /* Settings panel */
-    .settings-panel {
+    /* Settings / history / profiles */
+    .settings-panel,
+    .history-panel,
+    .profiles-panel,
+    .export-import-panel {
       background: #0f172a;
       border: 1px solid #1e293b;
       border-radius: 12px;
       padding: 14px;
+      margin-bottom: 12px;
     }
     .setting-row {
       display: flex;
@@ -328,15 +362,8 @@
       accent-color: #4ade80;
       cursor: pointer;
     }
-
-    .history-panel, .profiles-panel {
-      background: #0f172a;
-      border: 1px solid #1e293b;
-      border-radius: 12px;
-      padding: 14px;
-    }
     .history-item {
-      background: #0f172a;
+      background: #0b1220;
       border: 1px solid #1e293b;
       border-radius: 8px;
       padding: 10px 12px;
@@ -361,7 +388,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: #0f172a;
+      background: #0b1220;
       border: 1px solid #1e293b;
       border-radius: 8px;
       padding: 8px 12px;
@@ -401,28 +428,58 @@
     .profile-item .p-actions .del-btn:hover {
       background: rgba(248, 113, 113, 0.1);
     }
-    .export-import-panel {
-      background: #0f172a;
-      border: 1px solid #1e293b;
-      border-radius: 12px;
-      padding: 14px;
+    .shortcut-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      font-size: 11px;
+      color: #cbd5e1;
+      border-bottom: 1px solid #1e293b;
+    }
+    .shortcut-row:last-child { border-bottom: none; }
+    .shortcut-row .keys {
+      font-family: 'SF Mono', Monaco, monospace;
+      font-size: 10px;
+      color: #fcd34d;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 5px;
+      padding: 2px 7px;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <div id="mainContentView" style="display:block">
-      <div class="header" id="mainHeader">
-        <div>
-          <h1>TSun-Eat-Token-Catcher</h1>
-          <div class="section-title" style="margin-top:4px;margin-bottom:0">Token Catcher for FF</div>
-        </div>
-        <div class="header-meta">
-          <button id="howToUpdateBtn" class="how-btn" type="button">?</button>
-          <span class="version" id="versionBadge">v2.2.0</span>
-        </div>
+    <div class="header">
+      <div>
+        <h1>TSun-Eat-Token-Catcher</h1>
+        <div class="section-title" style="margin-top:4px;margin-bottom:0">Token Catcher for FF</div>
       </div>
+      <div class="header-meta">
+        <span class="version" id="versionBadge">v2.3.0</span>
+      </div>
+    </div>
 
+    <!-- TAB BAR -->
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="login" type="button">
+        <span class="tab-icon">🔑</span>Login
+      </button>
+      <button class="tab-btn" data-tab="history" type="button">
+        <span class="tab-icon">🕘</span>History
+      </button>
+      <button class="tab-btn" data-tab="profiles" type="button">
+        <span class="tab-icon">👤</span>Profiles
+      </button>
+      <button class="tab-btn" data-tab="settings" type="button">
+        <span class="tab-dot" id="settingsTabDot"></span>
+        <span class="tab-icon">⚙️</span>Settings
+      </button>
+    </div>
+
+    <!-- ===== TAB 1: LOGIN / CAPTURE ===== -->
+    <div id="tab-login" class="tab-content active">
       <p class="section-title">Select Provider to Login</p>
       <div class="providers">
         <button class="provider-btn" data-url="https://auth.garena.com/universal/oauth?platform=8&response_type=code&locale=en-SG&client_id=100067&redirect_uri=https://api.ff.garena.co.id/auth/auth/callback_n?site=https://api-discountstore.gid.recargajogo.com.br/oauth/callback_redirect/" type="button">
@@ -441,13 +498,6 @@
           <img src="https://raw.githubusercontent.com/KillerSharmaBot/Eat-Token/refs/heads/main/image/VK.png" alt="VK" />
         </button>
       </div>
-
-      <div class="update-bar hidden" id="updateBar">
-        <div class="update-info" id="updateInfo">Update available</div>
-        <button class="update-btn" id="updateBtn" type="button">Update</button>
-      </div>
-
-      <div class="update-status" id="updateStatus"></div>
 
       <div class="panel">
         <div class="section-title" style="display: flex; justify-content: space-between; align-items: center;">
@@ -482,9 +532,41 @@
           </div>
         </div>
       </div>
+    </div>
 
-      <div class="settings-panel" style="margin-top: 12px;">
-        <div class="section-title">Settings</div>
+    <!-- ===== TAB 2: HISTORY ===== -->
+    <div id="tab-history" class="tab-content">
+      <div class="history-panel">
+        <div class="section-title" style="display: flex; justify-content: space-between; align-items: center;">
+          <span>History (last 2)</span>
+        </div>
+        <div id="historyList">
+          <div class="status-waiting" style="font-size: 12px; padding: 12px 0;">No history yet.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== TAB 3: PROFILES ===== -->
+    <div id="tab-profiles" class="tab-content">
+      <div class="profiles-panel">
+        <div class="section-title" style="display: flex; justify-content: space-between; align-items: center;">
+          <span>Saved Profiles</span>
+          <button id="saveProfileBtn" class="copy-btn" type="button" style="text-transform: none;">Save Current</button>
+        </div>
+        <div style="display: flex; gap: 6px; margin-bottom: 8px;">
+          <input type="text" id="profileNameInput" placeholder="Profile name" style="flex:1; background: #0b1220; border: 1px solid #1e293b; border-radius: 6px; padding: 6px 10px; color: #e2e8f0; font-size: 12px;">
+          <button id="saveProfileBtn2" class="copy-btn" type="button" style="text-transform: none;">Save</button>
+        </div>
+        <div id="profileList">
+          <div class="status-waiting" style="font-size: 12px; padding: 8px 0;">No profiles saved.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== TAB 4: SETTINGS ===== -->
+    <div id="tab-settings" class="tab-content">
+      <div class="settings-panel">
+        <div class="section-title">Preferences</div>
         <div class="setting-row">
           <label for="autoCopyToggle" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
             <input type="checkbox" id="autoCopyToggle">
@@ -493,44 +575,30 @@
         </div>
       </div>
 
-      <div class="history-panel" style="margin-top: 12px;">
-        <div class="section-title" style="display: flex; justify-content: space-between; align-items: center;">
-          <span>History (last 2)</span>
-        </div>
-        <div id="historyList">
-          <div class="status-waiting" style="font-size: 12px; padding: 12px 0;">No history yet.</div>
-        </div>
-      </div>
-
-      <div class="profiles-panel" style="margin-top: 12px;">
-        <div class="section-title" style="display: flex; justify-content: space-between; align-items: center;">
-          <span>Profiles</span>
-          <button id="saveProfileBtn" class="copy-btn" type="button" style="text-transform: none;">Save Current</button>
-        </div>
-        <div style="display: flex; gap: 6px; margin-bottom: 8px;">
-          <input type="text" id="profileNameInput" placeholder="Profile name" style="flex:1; background: #0f172a; border: 1px solid #1e293b; border-radius: 6px; padding: 6px 10px; color: #e2e8f0; font-size: 12px;">
-          <button id="saveProfileBtn2" class="copy-btn" type="button" style="text-transform: none;">Save</button>
-        </div>
-        <div id="profileList">
-          <div class="status-waiting" style="font-size: 12px; padding: 8px 0;">No profiles saved.</div>
+      <div class="export-import-panel">
+        <div class="section-title">Backup &amp; Restore</div>
+        <div style="display: flex; gap: 8px;">
+          <button id="exportBtn" class="copy-btn" type="button" style="text-transform: none; flex:1;">Export Data</button>
+          <button id="importBtn" class="copy-btn" type="button" style="text-transform: none; flex:1;">Import Data</button>
+          <input type="file" id="importFileInput" accept=".json" style="display: none;">
         </div>
       </div>
 
-      <div class="export-import-panel" style="margin-top: 12px; display: flex; gap: 8px;">
-        <button id="exportBtn" class="copy-btn" type="button" style="text-transform: none; flex:1;">Export Data</button>
-        <button id="importBtn" class="copy-btn" type="button" style="text-transform: none; flex:1;">Import Data</button>
-        <input type="file" id="importFileInput" accept=".json" style="display: none;">
+      <div class="settings-panel">
+        <div class="section-title">Keyboard Shortcuts</div>
+        <div class="shortcut-row"><span>Open popup</span><span class="keys">Ctrl+Shift+E</span></div>
+        <div class="shortcut-row"><span>Copy token</span><span class="keys">Ctrl+Shift+C</span></div>
+        <div class="shortcut-row"><span>Clear token</span><span class="keys">Ctrl+Shift+R</span></div>
       </div>
 
-      <div class="footer">Designed for discstore.recargajogo.com.br</div>
-    </div>
+      <div class="settings-panel">
+        <div class="section-title">Updates</div>
+        <div class="update-bar hidden" id="updateBar">
+          <div class="update-info" id="updateInfo">Update available</div>
+          <button class="update-btn" id="updateBtn" type="button">Update</button>
+        </div>
+        <div class="update-status" id="updateStatus"></div>
 
-    <div id="helpView" style="display:none">
-      <div class="header">
-        <h1>How to Update</h1>
-        <button id="backBtn" class="back-btn" type="button">&#8592; Back</button>
-      </div>
-      <div class="panel">
         <div class="step">
           <strong>Step 1: Download Update</strong>
           Click the <strong>Update</strong> button. The file saves as <code>TSun-Eat-Token-Catcher.zip</code>.
@@ -540,7 +608,7 @@
           Open the folder where you extracted or installed this extension.
         </div>
         <div class="step">
-          <strong>Step 3: Extract & Replace</strong>
+          <strong>Step 3: Extract &amp; Replace</strong>
           Unzip the downloaded file and <strong>replace all files</strong> inside the folder above.
         </div>
         <div class="step">
@@ -549,6 +617,8 @@
         </div>
       </div>
     </div>
+
+    <div class="footer">Designed for discstore.recargajogo.com.br</div>
   </div>
 
   <script src="popup.js"></script>
