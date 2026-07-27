@@ -7,7 +7,7 @@
 <p>
   <img src="https://img.shields.io/badge/Chrome_Extension-Manifest_V3-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Manifest V3" />
   <img src="https://img.shields.io/badge/Platform-Free_Fire-FFD166?style=for-the-badge&logo=garena&logoColor=black" alt="Free Fire" />
-  <img src="https://img.shields.io/badge/Release-v2.3.0-00F5D4?style=for-the-badge" alt="Release v2.3.0" />
+  <img src="https://img.shields.io/badge/Release-v2.4.0-00F5D4?style=for-the-badge" alt="Release v2.4.0" />
   <img src="https://img.shields.io/badge/License-MIT-F15BB5?style=for-the-badge" alt="MIT License" />
 </p>
 
@@ -199,8 +199,8 @@ python oauth_app.py
 
 The version is sourced from `manifest.json` via `chrome.runtime.getManifest().version`, so only one place needs updating:
 
-- `manifest.json` ➔ `"version": "2.3.0"`
-- `popup.html` ➔ header version badge (`v2.3.0`)
+- `manifest.json` ➔ `"version": "2.4.0"`
+- `popup.html` ➔ header version badge (`v2.4.0`)
 - `release.md` ➔ release notes for the new tag
 
 </details>
@@ -210,6 +210,17 @@ The version is sourced from `manifest.json` via `chrome.runtime.getManifest().ve
 ## 📝 Changelog
 
 <details open>
+<summary><b>v2.4.0 — Aether Terminal redesign</b></summary>
+
+<br>
+
+- Rebuilt the popup UI on the **Aether Terminal** design system (refined glassmorphism, indigo/violet primary, amber tertiary).
+- Dual-font typography: **Inter** for UI, **JetBrains Mono** for token/data strings.
+- Tokenized palette, nested-radius shape language, and consistent glass layering across all four tabs.
+
+</details>
+
+<details>
 <summary><b>v2.3.0 — Tabbed UI &amp; smarter updates</b></summary>
 
 <br>

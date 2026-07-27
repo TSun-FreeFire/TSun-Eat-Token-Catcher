@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
           updateBtn.disabled = false;
           return;
         }
-        updateStatus.textContent = 'Downloaded! Extract ZIP and load unpacked in chrome://extensions.';
+        updateStatus.textContent = 'Downloaded! Extract ZIP and load unpacked.';
         updateBtn.disabled = false;
       });
     } catch (e) {
@@ -97,7 +97,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Listen for capture messages from background
   chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     if (msg.type === "CAPTURED") {
       updateUI(msg.data);
@@ -107,20 +106,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
   chrome.action.setBadgeText({ text: '' });
 
+  // Copy buttons with toast feedback
   document.querySelectorAll('.copy-btn').forEach((btn) => {
+    // Skip buttons that are not copy buttons (like clear, save, etc.)
+    if (btn.id === 'clearBtn' || btn.id === 'saveProfileBtn' || btn.id === 'saveProfileBtn2' ||
+        btn.id === 'exportBtn' || btn.id === 'importBtn' || btn.id === 'updateBtn') return;
+
     btn.addEventListener('click', () => {
       const targetId = btn.id.replace('copy-', 'val-');
-      const text = document.getElementById(targetId).textContent;
+      const textEl = document.getElementById(targetId);
+      if (!textEl) return;
+      const text = textEl.textContent;
       if (!text || text === '-') return;
+
       navigator.clipboard.writeText(text).then(() => {
-        const prev = btn.textContent;
-        btn.textContent = 'Copied!';
+        const prevText = btn.textContent;
+        btn.textContent = '✓ Copied!';
         btn.classList.add('copied');
         setTimeout(() => {
-          btn.textContent = prev;
+          btn.textContent = prevText;
           btn.classList.remove('copied');
-        }, 1500);
-      });
+        }, 1400);
+      }).catch(() => {});
     });
   });
 
@@ -135,15 +142,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // History
   loadHistory();
-
-  // Profiles
   loadProfiles();
   document.getElementById('saveProfileBtn').addEventListener('click', saveProfile);
   document.getElementById('saveProfileBtn2').addEventListener('click', saveProfile);
 
-  // Export/Import
   document.getElementById('exportBtn').addEventListener('click', exportData);
   document.getElementById('importBtn').addEventListener('click', () => {
     document.getElementById('importFileInput').click();
@@ -182,7 +185,6 @@ async function checkRemoteVersion() {
   }
 }
 
-// Compare two semver strings. Returns 1 if a>b, -1 if a<b, 0 if equal.
 function compareVersions(a, b) {
   const pa = String(a).replace(/^v/i, '').trim().split('.').map((n) => parseInt(n, 10) || 0);
   const pb = String(b).replace(/^v/i, '').trim().split('.').map((n) => parseInt(n, 10) || 0);
@@ -205,7 +207,6 @@ function renderUpdateStatus(remoteVersion) {
 
   if (!remoteVersion) return;
 
-  // Only flag an update when the remote version is genuinely newer.
   if (compareVersions(remoteVersion, LOCAL_VERSION) > 0) {
     updateBar.classList.remove('hidden');
     updateInfo.textContent = `New version ${remoteVersion} available`;
@@ -279,7 +280,7 @@ function loadProfiles() {
     names.forEach((name) => {
       const data = profiles[name];
       const isSelected = (name === selected);
-      html += `<div class="profile-item" style="border-color: ${isSelected ? 'rgba(74,222,128,0.3)' : '#1e293b'};">
+      html += `<div class="profile-item${isSelected ? ' selected' : ''}">
         <span class="p-name">${name} ${isSelected ? '⭐' : ''}</span>
         <div class="p-actions">
           <button class="load-btn" data-name="${name}">Load</button>
@@ -288,7 +289,6 @@ function loadProfiles() {
       </div>`;
     });
     container.innerHTML = html;
-    // Add event listeners
     container.querySelectorAll('.load-btn').forEach((btn) => {
       btn.addEventListener('click', () => {
         const name = btn.getAttribute('data-name');
@@ -333,7 +333,6 @@ function loadProfile(name) {
     const profiles = result.profiles || {};
     const data = profiles[name];
     if (!data) return;
-    // Save as current token and also set selected profile
     chrome.storage.local.set({ [STORAGE_KEY]: data, selected_profile: name }, () => {
       updateUI(data);
       loadProfiles();
@@ -392,7 +391,6 @@ function importData(event) {
         auto_copy: data.auto_copy || false,
         selected_profile: data.selected_profile || ''
       }, () => {
-        // Also reload UI
         chrome.storage.local.get([STORAGE_KEY], (res) => {
           updateUI(res[STORAGE_KEY]);
         });
